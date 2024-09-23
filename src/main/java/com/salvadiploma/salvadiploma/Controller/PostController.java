@@ -47,6 +47,30 @@ public class PostController {
         return ResponseEntity.ok("Esta é a lista total:" + admUser.getPosts());
     }
 
+    @CrossOrigin(origins = "*")
+    @PostMapping("/savePost")
+    public ResponseEntity<String> savePost(@RequestBody RegisterRequest request) {
+        String name = request.getName();
+        String description = request.getDescription();
+        String title = request.getTitle();
+        String link = request.getLink();
+        String objective = request.getObjective();
+
+
+        User user = userRepository.findByName(name);
+        User admUser = userRepository.findByName("gabriel");
+
+        String image = user.getImage( );
+
+        Object post = new Post(title, description, objective, link, name, image);
+
+        admUser.addPost(post);
+        user.addPost(post);
+
+        userRepository.save(user);
+        return ResponseEntity.ok("Esta é a lista total:" + user.getPosts());
+    }
+
 
     @CrossOrigin(origins = "*")
     @PostMapping("/returnPosts")
